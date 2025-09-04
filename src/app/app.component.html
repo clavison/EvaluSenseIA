@@ -1,0 +1,117 @@
+<main class="container">
+  <header class="header">
+    <div class="brand">
+      <img src="../assets/logo.png" alt="EvalusenseIA" />
+      <h1>Imersão Dev Agentes de IA - Alura | com Google Gemini </h1>
+    </div>
+    <div class="subtitle">Correção automática de avaliações de programação</div>
+  </header>
+  <!-- Configurações -->
+  <section class="card">
+    <h2>Configurações</h2>
+
+    <div class="row">
+      <label for="username">Usuário GitHub</label>
+      <input type="text" id="username" [(ngModel)]="username" placeholder="clavison" />
+    </div>
+
+    <div class="row">
+      <label for="token">Token (opcional)</label>
+      <input type="text" id="token" [(ngModel)]="token" placeholder="ghp_..." />
+      <small>Token necessário para evitar limites de requisição.</small>
+    </div>
+
+    <div class="row">
+      <button (click)="loadRepos()" [disabled]="reposLoading">Carregar repositórios</button>
+    </div>
+  </section>
+
+  <!-- Repositórios -->
+  <section class="card">
+    <h2>Repositórios do GitHub</h2>
+
+    <div *ngIf="reposLoading">Carregando repositórios...</div>
+    <div *ngIf="!reposLoading && repos.length === 0">Nenhum repositório encontrado.</div>
+
+    <div class="row">
+      <label for="repo">Selecionar repositório</label>
+      <select id="repo" (change)="onRepoChange($event)">
+        <option value="">-- escolha --</option>
+        <option *ngFor="let r of repos" [value]="r.name">{{ r.name }}</option>
+      </select>
+    </div>
+  </section>
+
+  <!-- Parâmetros do professor -->
+  <section class="card">
+    <h2>Parâmetros da Avaliação (opcionais)</h2>
+    <div class="grid">
+      <div class="col">
+        <label for="avaliacao">Avaliação</label>
+        <textarea id="avaliacao" rows="10" [(ngModel)]="avaliacao"
+          placeholder="Descreva a tarefa a ser avaliada..."></textarea>
+      </div>
+      <div class="col">
+        <label for="criterios">Critérios de avaliação</label>
+        <textarea id="criterios" rows="10" [(ngModel)]="criterios"
+          placeholder="Critérios, rubricas, pesos..."></textarea>
+      </div>
+      <div class="col">
+        <label for="exemploSaida">Exemplo de saída</label>
+        <textarea id="exemploSaida" rows="10" [(ngModel)]="exemploSaida"
+          placeholder="Formato esperado da resposta/execução..."></textarea>
+      </div>
+      <div class="col">
+        <label for="avaliacaoModelo">Avaliação modelo</label>
+        <textarea id="avaliacaoModelo" rows="10" [(ngModel)]="avaliacaoModelo"
+          placeholder="Uma correção de exemplo, se desejar..."></textarea>
+      </div>
+    </div>
+
+    <div class="checkbox-container">
+      <label>
+        <input type="checkbox" [(ngModel)]="usarBase64" />
+        Enviar conteúdos dos arquivos em <strong>base64</strong> (padrão: conteúdo decodificado)
+      </label>
+    </div>
+
+    <div class="row">
+      <button (click)="rebuildAll()" [disabled]="!selectedRepo || branchesLoading">
+        {{ branchesLoading ? 'Processando...' : 'Gerar/Regerar prompts para o repositório selecionado' }}
+      </button>
+    </div>
+  </section>
+
+  <!-- Status -->
+  <div class="status" *ngIf="message">{{ message }}</div>
+  <div class="status error" *ngIf="error">{{ error }}</div>
+
+  <!-- Branches e Prompts -->
+  <section class="card" *ngIf="selectedRepo">
+    <h2>Prompts gerados ({{ prompts.length }}) — Repo: <span class="mono">{{ selectedRepo }}</span></h2>
+    <div *ngIf="branchesLoading">Carregando branches/arquivos...</div>
+
+    <div *ngFor="let p of prompts" class="prompt">
+      <div class="prompt-head">
+        <div>
+          <strong>Branch:</strong> <span class="badge">{{ p.branch }}</span>
+          <span class="muted">arquivos .java: {{ p.filesCount }}</span>
+        </div>
+        <div class="muted">gerado em {{ p.generatedAt | date:'short' }}</div>
+      </div>
+
+      <textarea [value]="p.prompt" rows="14" readonly></textarea>
+      <div class="row right">
+        <button (click)="copy(p.prompt)">Copiar prompt</button>
+      </div>
+    </div>
+
+    <div *ngIf="!branchesLoading && prompts.length === 0" class="muted">
+      Nenhum prompt ainda. Clique em <em>Gerar/Regerar prompts...</em>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <span>© {{ title }} / Clávison M. Zapelini — {{ currentYear }}</span>
+</footer>

@@ -1,0 +1,16 @@
+:root {
+    --blue: #0b2c4d;
+    --green: #16a34a;
+    --metalic: #9aa0a6;
+    --bg: #f6f7f9;
+    --card: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body,
+html {
+    background: var(--bg);
+}
