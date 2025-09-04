@@ -8,8 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "clean:dist": "rd /s /q dist",
-    "build:prod": "ng build --configuration production --base-href \"/EvaluSenseIA/\" --output-path=dist/evalusense-ia",
-    "deploy": "npm run build:prod && echo www.clavisonlab.com.br> dist/evalusense-ia/browser/CNAME && npx angular-cli-ghpages --dir=dist/evalusense-ia/browser --no-silent"
+    "build:prod": "ng build --configuration production --base-href \"/\" --output-path=dist/evalusense-ia",
+    "deploy": "npm run build:prod && echo www.seudominio.com> dist/evalusense-ia/browser/CNAME && npx angular-cli-ghpages --dir=dist/evalusense-ia/browser --no-silent",
   },
   "private": true,
   "dependencies": {
