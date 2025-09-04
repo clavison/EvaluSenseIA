@@ -6,7 +6,10 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "clean:dist": "rd /s /q dist",
+    "build:prod": "ng build --configuration production --base-href \"/EvaluSenseIA/\" --output-path=dist/evalusense-ia",
+    "deploy": "npm run build:prod && echo.> dist/evalusense-ia/browser/.nojekyll && npx angular-cli-ghpages --dir=dist/evalusense-ia/browser --no-silent"
   },
   "private": true,
   "dependencies": {
