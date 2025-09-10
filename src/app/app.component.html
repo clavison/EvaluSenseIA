@@ -16,9 +16,15 @@
     </div>
 
     <div class="row">
-      <label for="token">Token (opcional)</label>
+      <label for="token">Token GitHub</label>
       <input type="text" id="token" [(ngModel)]="token" placeholder="ghp_..." />
       <small>Token necessário para evitar limites de requisição.</small>
+    </div>
+
+    <div class="row">
+      <label for="tokenG">Token Gemini</label>
+      <input type="text" id="tokenG" [(ngModel)]="tokenG" placeholder="Google IA Studio" />
+      <small>Token necessário para executar a correção.</small>
     </div>
 
     <div class="row">
@@ -103,6 +109,14 @@
       <textarea [value]="p.prompt" rows="14" readonly></textarea>
       <div class="row right">
         <button (click)="copy(p.prompt)">Copiar prompt</button>
+        <button (click)="executar(p)" [disabled]="p.running">{{ p.running ? 'Executando...' : 'Executar' }}</button>
+      </div>
+      <div *ngIf="p.result" class="exec-output">
+        <label>Saída da IA:</label>
+        <textarea [value]="p.result" rows="15" readonly></textarea>
+        <div class="row right">
+          <button (click)="copy(p.result)">Copiar saída</button>
+        </div>
       </div>
     </div>
 

@@ -213,3 +213,30 @@ button:hover:not(:disabled) {
     height: auto;
     margin-top: 2px; /* opcional, para alinhar melhor com o texto */
 }
+
+.exec-output {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background: #f7f7f7;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+
+  textarea {
+    width: 100%;
+    min-height: 120px;
+    resize: vertical;
+    font-family: monospace;
+    font-size: 0.9rem;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: #fff;
+  }
+
+  .row {
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+  }
+}

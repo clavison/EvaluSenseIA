@@ -46,14 +46,12 @@ ${input.usarBase64 ? f.base64 : f.decoded}
         const tail =
             `
 Tarefa da IA:
-1) Avalie o código do ALUNO (branch ${input.branch}) conforme os CRITÉRIOS e, se fornecida, a AVALIAÇÃO MODELO.
-2) Responda no seguinte formato:
-{
-  "branch": "${input.branch}",
-  "nota": "<0..10>",
-  "feedback": "<texto objetivo>",
-  "observacoes": "<opcional>"
-}
+1) Você é um professor de programação e sua tarefa é avaliar o código do ALUNO (branch ${input.branch}) conforme os CRITÉRIOS e, se fornecida, a AVALIAÇÃO MODELO.
+2) Responda no seguinte formato (padrão texto - não usar JSON):
+
+  Aluno: ${input.branch},
+  Nota: <0..10>,
+  Feedback: <texto bastante objetivo contendo cada critério e o que não foi atendido que justifica o desconto da nota. Não especificar os pontos positivos, apenas as falhas>
 `;
 
         return `${header}\n${filesBlock}\n${tail}`;

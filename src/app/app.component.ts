@@ -1,15 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { BranchRef, GithubService, Repo } from './services/github-services';
+import {GeminiApiService} from './services/gemini-service';
 import { AiService, JavaFilePayload } from './services/ai-service';
 import { firstValueFrom } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-interface BranchPrompt {
+interface   BranchPrompt {
   branch: string;
   prompt: string;
   filesCount: number;
   generatedAt: string;
+  result?: string;   
+  running?: boolean; 
 }
 
 @Component({
@@ -28,6 +31,7 @@ export class AppComponent implements OnInit {
   // UI State
   username = 'clavison';
   token = '';
+  tokenG = '';
   repos: Repo[] = [];
   reposLoading = false;
 
@@ -50,7 +54,7 @@ export class AppComponent implements OnInit {
   message = '';
   error = '';
 
-  constructor(private gh: GithubService, private ai: AiService) { }
+  constructor(private gh: GithubService, private ai: AiService, private gemini: GeminiApiService) { }
 
   ngOnInit(): void {
     this.loadRepos();
@@ -195,5 +199,42 @@ export class AppComponent implements OnInit {
     navigator.clipboard.writeText(text);
     this.message = 'Prompt copiado para a área de transferência.';
     setTimeout(() => (this.message = ''), 2500);
+  }
+
+  async  executar(p: BranchPrompt) {
+    this.error = '';
+    if (!this.tokenG || this.tokenG.trim() === '') {
+      this.error = 'É necessário informar o Token Gemini para executar o prompt.';
+      return;
+    }
+
+    this.gemini.initialize(this.tokenG);
+
+    try {
+      p.running = true;
+      p.result = undefined;
+      const resposta = await firstValueFrom(
+        this.gemini.generateContent(p.prompt)
+      );
+     if(resposta){
+      let clean = resposta.trim();
+      if (clean.startsWith('```')) {
+        clean = clean.replace(/^```(json)?/i, '').replace(/```$/, '').trim();
+      }
+       try {
+         const parsed = JSON.parse(resposta);
+         p.result = JSON.stringify(parsed, null, 2);
+       } catch {
+         p.result = resposta; 
+       }
+     }else{
+      p.result = 'Nenhum resultado retornado.';
+     }
+    } catch (e) {
+      console.error('Erro ao executar prompt', e);
+      this.error = 'Falha ao executar o prompt. Verifique o token e tente novamente.';
+    } finally {
+      p.running = false;
+    }
   }
 }
