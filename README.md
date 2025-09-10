@@ -1,5 +1,8 @@
 # EvalusenseIA 🚀
 
+### URL do Projeto: 
+- [https://www.clavisonlab.com.br/](https://www.clavisonlab.com.br/)
+
 **Projeto desenvolvido durante a Imersão IA — Alura + Google**, explorando o poder da API Gemini para criar uma aplicação prática e didática que automatiza a correção de avaliações de programação.
 
 Este repositório contém um **projeto Angular standalone** que integra diretamente com o GitHub e a **Google Generative AI (Gemini 1.5 Flash)**, demonstrando como transformar prompts em feedbacks estruturados, notas e insights automáticos.
